@@ -23,6 +23,17 @@ def predict_api():
     print(output[0])
     return jsonify(output[0]) #return the output in json format 
 
+# create web application
+@app.route('/predict',methods=['POST']) #post = send data to server via POSTMAN
+def predict():
+    data = [float(x) for x in  request.form.values()] #get the data from html form
+    final_input = scalar.transform(np.array(data).reshape(1,-1)) #transform data into scalar
+    print(final_input) # print the data
+    output = regmodel.predict(final_input)[0] #predict the data # why [0] ???  #output is in array format
+    return render_template('home.html',prediction_text='The House Price prediction is {}'.format(output)) #render the html page and pass the output to html page
+
+    
+
 if __name__ == "__main__":
     app.run(debug=True) # run the app in debug mode, so that we can see the error in browser
     
